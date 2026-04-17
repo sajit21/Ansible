@@ -20,3 +20,40 @@
       group: root
       mode: 0644
 
+#  - name: install unzip
+#    package:
+#      name: unzip
+
+#  - name: install terraform 
+#    unarchive:
+#      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
+#      dest: /usr/local/bin
+#      remote_src: yes
+#      mode: 0755
+#      owner: root
+#     group: root
+
+- hosts: all
+  become: true
+  tasks:
+  - name: create simone user
+    tags: always
+    user:
+      name: simone
+      group: root
+
+  - name: ssh key added for simone
+    tags: always
+    authorized_key:
+      user: simone
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJveB20tcmyUjZXQ9XqVqL2r5Gk7WFsO/ZMU1T3dVLDm ansible"
+  
+  - name: add sudoers file for simone 
+    tags: always
+    copy:
+      src: sudoers_simone
+      dest: /etc/sudoers.d/simone
+      owner: root
+      group: root
+      mode: 0440
+
